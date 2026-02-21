@@ -1,0 +1,58 @@
+Amazon, swiggy - everything is stored in database only..when ur filter based on location..it it fetching from database.
+
+SQL - Structured query language
+data store- database
+computer chip - 0s and 1s       - files, photos will get saved like 0s and 1s (data center - amazon has many data chip wont be sufficient)
+ 
+Hierarchical db - used in mainframe
+no SQL db
+
+
+Database - storing in memory
+sql - lang
+Types - table format storing (relational db)
+
+DBMS - we need this software to query so it will interact with database
+
+DBMS:
+Interface between database and end user
+software to store, retrieve, define and manage data in database
+easy CRUD operations. (create, read, update, delete)
+Takes care of authentication, concurrency, logging, backup, optimization etc.,
+
+
+RDBMS
+Mysql - open src
+SQL server - microsfot
+Oracle - IBM
+PostgreSql - Open src
+
+SQL -->DBMS --> DB
+
+Dataypes
+Character -fixed Char(5),variable varchar(100)
+"nyc  " - space will be stored balance 2 -- char --- eg airport abbreaviation will be 3 letter so char we can use
+Varchar - will save tha spacee
+Text- if we cross 45kb bytes in  then we can use it
+BLOB  - Binary large object file--even images we can store in binary format
+Numeric - INT, decimal (5) -- 999.99
+
+Basic Queries:
+
+Show databases; - it will show how many dbs are there
+Each n every db have multiple tables -- for eg: sales details will be in sales db, product details will be in product db
+
+Create database logicfirst;
+database - top level container
+schema - sub level container - organizes data within databases.
+
+
+
+
+Show character set; - will show which characters are supported in sql - latin1 is the default and we will use
+if we want to change their lang code then u can use utf8
+
+
+
+
+

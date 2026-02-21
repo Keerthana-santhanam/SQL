@@ -1,0 +1,1594 @@
+why everyone is moving to cloud from oracle?
+you can access data from anywhere in cloud, bt oracle you need vpn or something like that. if there is any disaster it will go..but cloud not like that
+
+
+how to see the file size in putty - ls -lh
+
+copy data from one table to another table
+INTO:
+select column1, column2,.. INTO new_table_name 
+FROM existing_table
+where condition;
+
+Joins:
+If you have table1 with data 1,1,1, in one column and table 2 with data 1,1 in one column the output will be 6 if you do inner join.
+
+1   1
+1   1
+1   1
+1   1
+1   1
+1   1
+ importabt -- check like this for left and right join and the output will be in 2 columns
+
+
+Notes:
+If you are using aggregate functions(MIN,MAX,AVG,SUM,COUNT) then fine, but the columns whatever you are giving it needs to be there in group by, otherwise it will throw error-- not a group by
+
+having we can use aggregate functions. 
+where we can't use aggregate. where is faster than having.
+
+#creating database
+
+create database Qadbt;
+
+#point to database
+
+use Qadbt;
+
+#create Tables
+
+create table Employeeinfo(name varchar(20),id int,location varchar(20),age int);
+
+describe Employeeinfo;
+
+insert into Employeeinfo values('sam',1,'newjersey',21);
+
+insert into Employeeinfo values('ram',2,'newyork',22);
+
+insert into Employeeinfo values('tam',3,'florida',23);
+
+insert into Employeeinfo values('nam',4,'charlotte',24);
+
+insert into Employeeinfo values('lam',5,'texas',25);
+
+select name,id,location,age from Employeeinfo;
+
+select name,age from Employeeinfo;
+
+select * from Employeeinfo;
+
+-------------------------------------------------------------------------------
+//Alter command is used to change only the table structure not the data:
+
+
+alter table Employeeinfo add gender varchar(10);
+
+describe Employeeinfo;
+
+#alter table Employeeinfo modify gender varchar(20);
+
+alter table Employeeinfo drop gender;
+
+describe Employeeinfo;
+
+select * from Employeeinfo;
+
+update Employeeinfo set gender='female' where name ='sam';
+
+update Employeeinfo set gender='male' where name ='ram';
+
+update Employeeinfo set gender='male' where name ='tam';
+
+update Employeeinfo set gender='male' where name ='nam';
+
+delete from Employeeinfo where name ='lam';
+
+create database sample;
+
+use sample;
+
+drop database sample;
+
+Course content
+Play
+8. creating Database and pointing to it
+5min
+Play
+9. Creating Tables in database
+8min
+Play
+10. Inserting records into Table
+8min
+Play
+11. Retrieving records from the Table
+6min
+Start
+12. SQL commands glossary on discussed Topics
+1min
+Play
+13. Adding and modifying records in a table
+7min
+Play
+14. Deleting records and droping database
+5min
+Play
+15. Updating rows in a table
+8min
+Play
+16. Modifying operations example
+6min
+
+-------------------------------------------------------------------------
+Logical operators to retrieve data:
+
+
+#unique Names in EmployeeTable---(without duplicates)
+select distinct name for employeeinfo;
+
+
+#get the employees name of newyork
+select name from employeeinfo where location = 'newyork';
+
+#get the employees name of newyork where the age should be more than 23
+select name from employeeinfo where location = 'newyork' and age >23;
+
+#get the employees name of florida where the age should be less than 23 or location is from charlotte.
+select name from employeeinfo where (location = 'florida' and age<23) or location='charlotte';
+
+
+select name from employeeinfo where id=1 or location='florida';
+
+#print the employee names whose age should be between 23 and 25
+select name from employeeinfo where age in (23,24,25);
+
+#print the employee names whose age id liesbetween 1 and 1000.--if is is more than 100 then use between only few means go with in operator.
+
+select name from employeeinfo where id between 1 and 1000;
+
+
+#print the employeenames lessthan 25.
+#age<25
+#in(1,2,...25)
+#between 0 and 25
+
+select name from employeeinfo where age not between 25 and 100;
+
+#id should not be 25-100
+-------------------------------------------------------
+Regular Expresssion:
+
+% _
+
+% stands for any character
+_ stands for single character
+
+#print the names with 3 letters where 1st letter be d
+d___
+
+
+Wild cards usage-----------------------------------------------------
+
+select Countrycode from city where countrycode like '_A%';
+
+Sort by usage------------------------------------
+
+#get names in alphabetical order
+select * from employeeinfo order by name desc;---descending order, alpha is default
+----------------------------------------------------------------------
+
+Group By:
+
+use world;
+
+select * from city;
+
+select name from city where countrycode like 'A%';
+
+select countrycode from city where countrycode like 'A%';
+
+select countrycode from city where countrycode like '__T%';
+
+select countrycode from city where countrycode like '_A%';
+
+use qadbt;
+
+select * from employeeinfo order by name;
+
+select * from employeeinfo order by id;
+
+select * from employeeinfo order by id desc;
+
+use Business;
+
+
+---------------------------------------
+Group by, Aggregate functions:
+
+
+select * from Transactions;
+
+
+#Get total sum of amount generated for each month
+select sum(Amount),Month from Transactions group by Month;
+
+#Get maximum transaction generated for each month
+select Max(Amount), Month from Transactions group by Month;
+
+#Get minimum transaction generated for each month
+select Min(Amount), Month from Transactions group by Month;
+
+
+select Min(Amount), Month,branch from Transactions group by branch;
+
+select Avg(Amount), Month from Transactions group by Month;
+----------------------------------------------------------------------
+
+Usage of Having keyword with groupby and aggregate functions:
+
+If you do not give group by it will for whole table,if you give group by it will take for grouped.
+
+
+select count(*),Month from Transactions group by Month
+
+#Condition on table--where -row by row
+#condition on group by-- having
+#Get the transactions which occured less than 2 for any month:
+
+select count(*),Month from Transactions group by Month having count(*)<2;
+
+----------------------------------------------------------------------
+Diff between having and where keyword and when to use
+
+#Get total sum of amount generated for each month only in bangalore or chicago branch
+select sum(Amount),Month from Transactions where branch = 'bangalore' or branch ='chicago' group by Month;
+
+select sum(Amount),Month from Transactions where branch = 'bangalore' or branch ='chicago' group by Month having sum(Amount)>20000;
+
+#Get total sum of amount generated for each month only in bangalore or chicaco branches:
+#Get the month which has total sale amount less than 1000 when i combine both sydney and paris branches
+
+select sum(Amount),Month from Transactions where branch ='paris' or branch ='sydney' group by Month having sum(Amount)<1000;
+
+#which branch have more than total sum of 4000 bucks in Feb
+select sum(Amount),branch from Transactions where Month='feb' group by branch having sum(Amount)>4000;
+-------------------------------------------------------------------
+SubQueries syntax and usage:
+
+What is the age of the people locate in texas?
+
+name,age,exp in one table citizen and name, loc will be in citizenloc table
+ 
+common is name in both tables:
+
+Select name,age from citizens where name= ;---after where whatever u r using that column should be present in both tables
+select name from citizenloc where location ='texas';
+
+
+Select name,age from citizens where name=(select name from citizenloc where location ='texas');
+
+Experience of people located in chicago?
+
+select name,exp from citizens where  name=(select name from citizenloc where location ='chicago');----multiple will be there means use in operator afte where. only one means use =
+
+
+Name and location of the person whom age is 41
+
+select name,location from citizenloc where name=(select name from citizens where age='41');
+
+----------------------------------------------------------------------
+SQL joins usage and its advantages:
+
+select c.name,cl.location,c.age from citizens as c join citizenloc as cl on c.name=cl.name where cl.location='california';
+
+Need total Employees count of a company which is establlished in a year 1990:  
+Company table have name, branch, employees.
+Established table have name and year.
+
+select c.name,e.year,sum(c.employees) from company as c join established as e on c.name=e.name where year = '1990' group by c.name;
+
+select c.name,e.year,sum(c.employees) from company as c join established as e on c.name=e.name group by c.name having year=1990;-------crct
+
+Min employees present in a branch for all companies estalished after 1990:
+
+select c.name,e.year,min(c.employees) from company as c join established as e on c.name=e.name group by c.name having year=1990;
+
+select c.name,e.year,sum(c.employees) from company as c join established as e on c.name=e.name group by c.name having e.year > 1990;
+
+-----------------------------------------------------------------
+join and inner join both are same
+
+Left join-
+This join returns all the rows of the table on the left side of the join and matches rows for the table on the right side of the join. For the rows for which there is no matching row on the right side, the result-set will contain null
+
+Right join-
+RIGHT JOIN is similar to LEFT JOIN. This join returns all the rows of the table on the right side of the join and matching rows for the table on the left side of the join. For the rows for which there is no matching row on the left side, the result-set will contain null. RIGHT JOIN is also known as RIGHT OUTER JOIN. 
+
+Studentdetails RO table name,id,age,gender,location
+Grades table grade, id.
+
+Id-(reg no-unique)
+
+Get the student details of RO(rahul organization) with Results who passed in exams:
+
+select s.name,s.id,s.gender,s.age,g.grade from student s inner join grade g where s.id=g.id;---inner join
+
+
+Get the student details of RO with result who appeared in exams:
+
+select s.name,s.id,s.gender,s.age,g.grade from student s left join grade g where s.id=g.id;---leftjoin
+
+Get the all student details with result who passed in exams:
+select s.name,s.id,s.gender,s.age,g.grade from student s Right join grade g where s.id=g.id;---right join
+
+Get the female student details of RO with results who passed in Exams:
+select s.name,s.id,s.gender,s.age,g.grade from student s inner join grade g where s.id=g.id and gender= 'female';
+
+Get the males tudent details of RO with result who appeared in exams:
+select s.name,s.id,s.gender,s.age,g.grade from student s Right join grade g where s.id=g.id and gender='male';
+--------------------------------------------------------------
+VIEWS-
+
+A table which is created from parent table.
+Virtual table
+you can hide some details from parent table and can derive child table from it.
+
+For Example: company table have details about google, youtube,tcs,cts but vendor is asking about google, we cant give all company details so we are creating view to derive the child table abt google info.
+
+Create view google_info as
+select * from company where name='google';
+
+select * from google_info;
+
+Select employees from company group by name;
+
+People whose more than avg employees:
+
+Create view Avg_company as
+select name,employees from company group by name having employees > (select avg(employees) from company);
+----------------------------------------------------------------------
+SQL String functions:
+
+#concat
+select concat(name,branch) as Branches from company;
+
+#Substr
+select substr(name,8)from company where name ='qaclickacademy';
+academy
+
+select substr(name,7,9) from company where name ='qaclickacademy';
+
+#replace
+Select replace(name,'aca','y')from company where name ='qaclickacademy';
+qaclickddemy
+
+#length
+Select length(name) from company where name ='qaclickacademy';
+14
+
+#Trim
+select trim(' king ');--all the spaces wil be removed before and after
+king
+
+#Top, limit
+select top 3 * from company;--top used in ms sql server lang, limit in mysql
+select name from company limit 3;
+
+--------------------------------------------------------------------
+Miscelleanous SQL keywords*Union, union all, intersect, exist,case:
+
+#Union- will remove duplicates and will only provide unique rows
+
+Select * from college;--It contains 1st and 2nd yr student names
+Select * from Results;---2nd yr and 3rd yr student names
+
+union will remove duplicate one.
+
+Select * from college union(select * from results);
+
+#Union all--It will bring duplicates also.
+
+Select * from college union all(select * from results);
+
+#Intersect--Finding out the common records which present in both tables
+Select * from college intersect (select * from results);--you dont have mysql in intersect so
+
+select * from college where id in(select id from Results);
+
+#Exists
+Q1- they want to know the details of complete college
+Exists
+Q2-if the person belongs to specific college
+
+If Q2 true then it will go Q1 
+if Q2 false nothing.
+
+Select * from college where exists (select * from college where name='Ram');--all rec will give coz this ram exist
+
+
+#CASE
+Manipulate the content of your table on run time and give you the new table on fly.
+
+case name----------Column name need to mention after when which value u r mentioning that column name
+
+Select score, 
+case name
+when 'time' then score*2
+when 'sam' then score-2
+when 'tina' then score*3
+else
+score
+end
+'NewScore',name from Marks;--newscore is based on the case conditon we are giving column name;
+--------------------------------------------------------------------------
+SQL Constraints:
+Constraints are used to limit the type of data that can go into a table.
+
+
+1.Not Null:
+By default, a column can hold NULL. If you do not want to allow NULL value in a column, you will want to place the NOT NULL constraint on this column. The NOT NULL constraint specifies that NULL is not an allowable value.
+#Constraints
+create table constab(flightname varchar(20), flightid integer not null);
+
+insert into constab values('abcd');---Error
+insert into constab values('abcd',null); Error-column flightid cannot be null
+
+2.DEFAULT:
+The default constraint provides a default value to a column when the INSERT INTO statement does not provide a specific value.
+
+create table constab2(name varchar(20), age int default 25);
+insert into constab2(name) values('jack');
+
+
+3.UNIQUE:
+The UNIQUE constraints ensures that all values in a column are distinct.
+
+create table constab3(name varchar(20), id integer unique);
+insert into constab3 (name,id) values('jack',21);
+insert into constab3 (name,id) values('jil',21);---Duplicate entry 21 for key id
+
+4.CHECK:
+The check constraint ensures that all values in a column satisfy certain conditions.once defined, the database will only insert a new row or update an existing row if the new values satisfies the CHECK constrain.
+The CHECK constraint is used to ensure the data quality.-----MYSQL does not support
+
+create table constab4(name varchar(20), id integer check(integer)>10);
+
+5.PRIMARY KEY:
+A primary key is used to uniquely identify each row in a table.
+A primary key cannot be NULL, as it does not make sense to use the NULL value to uniquely identify a record. Therefore, the column that is set as a primary key or as part of a primary key cannot be NULL.
+
+unique+not null= primary key;
+
+Create table empdb(empid int,name varchar(20), branch varchar(20), primary key(empid));
+
+
+6.FOREIGN KEY:
+A foregin key is a column/columns that references a column(most often the primary key)of another table. The purpose of the foregin key is to ensure referential integrity of the data.
+
+
+order details table---orderid(pk),customerid(fk),amount,date
+Customer details--customerid(pk),address,zipcode
+
+If the id is present in customer id then only you can add in orderdetails(customer id)
+if you want to delete any record in customer details, 1st you need to delete in order details.
+
+it is like--1st you are subscribing that shop(customer details0 then you are ordering(order details)
+
+Query:
+create table CustomersDetails(customerId int(50),address varchar(50),zipcode varchar(50),primary Key(customerId));
+
+create table OrdersDetails(orderId int(50),customerId int(50),Amount int(50),date varchar(50),primary Key(orderId), Foreign Key(customerId) REfERENCES CustomersDetails(customerId));
+
+drop table OrdersDetails2;
+
+
+Insert into CustomersDetails values(1234567,'bangalore',9999);
+
+Insert into OrdersDetails values(8735365,1234567,999,'jan');
+
+
+select * from CustomersDetails2;
+
+select * from OrdersDetails;
+
+delete from CustomersDetails where customerId=12345;
+
+delete from CustomersDetails where customerId=123456;//Parent
+
+delete from OrdersDetails where customerId=123456;//child 1st needs to delete then parent
+
+
+On Delete Cascade keyword to force rules on Foregin key deletion:
+
+If you have many foregin table you cant delete one by one child so if you delete parent table then if will delete all parent:
+
+create table OrdersDetails2(orderId int(50),customerId int(50),Amount int(50),date varchar(50),primary Key(orderId), Foreign Key(customerId) REfERENCES CustomersDetails2(customerId) ON DELETE CASCADE);
+
+create table CustomersDetails2(customerId int(50),address varchar(50),zipcode varchar(50),primary Key(customerId)s);
+
+
+Insert into CustomersDetails2 values(123456,'bangalore',9999);
+
+Insert into OrdersDetails2 values(87353,123456,999,'jan');
+
+delete from customerdetails2 where customerid=123456;
+
+when parent customer id record is deleted, come back find out all child dependencies and delete all child foregin keys rows as well.
+
+------------------------------------------------------------
+
+Rank and dense Rank Example:
+
+
+SELECT RANK() OVER(ORDER BY sold products DESC) AS r,
+  DENSE_RANK() OVER(ORDER BY sold products DESC) AS dr,
+  first_name,
+  last_name,
+  month,
+  sold products
+FROM sales_assistant;
+
+Simply put, RANK skips the number of positions after records with the same rank number. The ranking RANK_DENSE returns position numbers from 1 to 6 because it doesn’t skip records with the same rank number:
+
+r	dr	first_name	last_name	month	sold products
+1	1	Alex	      Smith	     6	2900
+2	2	Lisa		Black		6	2700
+2	2	Mary		Jacobs	     6	2700
+4	3	Mary		Jacobs	     5	2400
+5	4	Lisa		Black		5	2300
+6	5	Mary		Jacobs	     7	1200
+6	5	Lisa		Black		7	1200
+8	6	Alex		Smith		7	1000
+
+
+--------------------------------------------------------------
+Time-Contains only time
+Date- contains only date
+Timestamp- contains dateand time
+Timestamptz-contains, data, time and timezone
+
+Remember: you can always remove historical info, but you cant add it.
+
+Data types:
+Timezone, Now, Timeofday, current_time, current_date.
+
+Select NOW();--current date and time it will show.
+
+Select TimeofDay()--text like thursday---
+
+Select current_date---2020-03-09
+--------------------
+Exract()-allows you to extract or obtain a sub-component  of a date value
+year, month, day, week,quarter
+
+Allows you to etract or obtain a sub-componenet of a date value
+Extract(year from date_col)
+
+Select extract(year from payment_date) as yr from payment;-- 2007
+select extract(month from payment_date) as pay_month from payment;--2
+select extract(Quarter from payment_date) as pay_month from payment;--1
+
+AGE()-calculates and returns the current age given a timestamp.
+Useage: age(date_ol)
+Returns
+13 years 1 mon 5 days 01:34:13.003423
+
+select age(payment_date) from payment:-- 13 years 1mon 5 days 01:34:12:0098
+
+To_char()
+General function to convert data types to text.
+Useful for timestamp formatting 
+Usage- To_char(date_col,'mm-dd-yyyy')
+
+Select to_char(payment_date,'dd-mm-yyyy') from payment;
+15-02-2007
+
+https://www.postgresql.org/docs/12/functions-formatting.html
+
+During which months did payments occur?- it should return full month name
+select distinct(to_char(paymennt_date,'MONTH')) from payment;
+
+How many payments occured on a monday?
+hint: use extract, dow keyword, sunday the start of a week(indexed at 0)
+
+Function 
+Returns a number from 1 to 7 representing the day of the week of a date, with Sunday=1, Monday=2, and so on.
+
+Syntax 
+DOW ( date-expression )
+
+select count(*) from payment where extract(dow from payment_date)=1;
+
+https://www.postgresql.org/docs/current/functions-math.html
+
+select 0.1* replacement_cost as deposit from film;
+------------------------------------------------------
+String functions and operations:
+https://www.postgresql.org/docs/current/functions-string.html
+
+select length(first_name) from customer;
+slect first_name ||' '|| last_name from custiomer;
+slect upper(first_name) ||' '|| (last_name) from custiomer;
+-------------------------------------
+Sub Query:
+select student, grade from test_scores where grade>(select avg(grade) from test_scores);
+
+select student, grade from test_scores where grade>(70);
+we can also use in operator
+
+select student,grade from test_scores where student in (select student from honor_rll_table);
+select student,grade from test_scores where student in (('keek','jaan','jb'));
+
+The exists operator is used to test for existence of rows in a subquery.
+Typically a subquery is passed in the Exists() function to check if any rows are returned with the subquery.
+
+select title, rental_rate from film where rental_rate>(select avg(rental_rate) from film);
+select * from rental where return_date between '2005-05-29' and '2005-05-30';
+
+select film_id, title from film where film_id in (select inventory.film_id from rental inner join inventory on inventory.inventory_id=rental.inventory_id where return_date between '2005-05-29' and '2005-05-30')order by film_id;
+
+select firstname,lastname from customer as c
+where exists------not exists
+(select * from payment as p
+where p.cus_id =c.cus_id
+and amount>11);
+
+Self join:
+A self join is a query in which a table is joined to itself.
+Self-joins are useful for comparing values in a column of rows within the same table.
+The self join can be viewed as a join of two copies of the same table.
+The table is not actually copies, but sql performs the command as though it were.
+There is no spcl keyword for a self join, its simply standard join syntax with the same table in both parts.
+However, when using a self join it is necessary to use an alias for the table, otherwise the table names would be ambiguous.
+
+Syntax:
+Select tableA.col, table.col from table As tableA
+join table As tableB on tableA.some_col=tableB.other_col;
+.
+emp:
+emp id, name, report id             name   rep
+1       andrew   3			andrew charlie
+2	  bob      3        -->		bob    charlie
+3	  charlie  1			charlie david
+4       david    1			david andrew
+
+Select emp.name, report.name as rep
+from employees as emp
+join employees as report on
+emp.emp_id=report.report_id;
+
+select f1.title, f2.title, f1.length from film
+as f1 inner join film as f2 on 
+f1.film_id!=f2.film_id
+and f1.lenght=f2.length;
+----------------------
+Case
+coalesce
+nullif
+cast
+views
+import and export functionality
+
+CASE:
+We can use the CASE statement to nly execute sql code when certain conditions are met.
+This is very similar to IF/ELSE statements in other programming languages.
+There are two main ways to use a CASE statement, either a general CASE or a CASE Expression.
+Both methods can lead to the same results.
+Let's first show the syntax for a "general" CASE.
+
+Syntax:
+CASE
+  when condition1 then result1
+  when condition2 then result2
+  else some_other_result
+END
+
+Example:
+a table
+1
+2
+Select a,
+case when a=1 then 'one'
+     when a=2 then 'two'
+else 'other' as label
+end
+from test;
+
+a  label
+1   one
+2   two
+
+The CASE Exp syntax first evaluates an expression then compares the result with each value in the WHEN clauses sequentially.
+
+Syntax:
+
+CASE expression
+  when value1 then result1
+  when value2 then result2
+  else some_other_result
+END
+
+Eg;
+Rewrite the prev example..
+
+Eg:
+Select customer_id,
+case
+  when (customer_id<=100) then 'premium'
+  when (customer_id between 100 and 200) then 'plus'
+  else 'normal'
+end as customer_classS
+from customer
+
+case exp:
+select customer_id,
+case customer_id
+     when 2 then 'winner'
+     when 5 then 'second place'
+     else 'normal'
+end as rafffle_results
+from customer;
+----------------------------------------------
+Coalesce:
+This func accepts an unlimited no of arguments. it returns the 1st argument that is not null. if all arguments are null, the coalesce function will return null.
+
+Coalesce(arg_1,arg_2,...arg_n)
+
+Eg:
+select coalesce(1,2)--1
+select coalesce(null,1,2)- 1
+
+This func becomes useful when querying a table that contains null values and substituting it with another value. 
+
+eg: 
+item    price   disc
+a       100     20
+b       300     null
+c       200     10
+
+what is the final price?
+select item,(price-discount) as final from table
+
+item  final
+a     80
+b     null
+c      190
+
+Doesn't work for item b, should be 300.
+
+Select item,(price-coalesce(discount,0)
+as final from table;--if disc value is null then substitute next value.
+
+item   final
+a       80
+b       300
+c       190
+
+CAST:
+The cast operator lets you convert from one data type into another.
+Keep in mind not every instance of a data type can be cast to another data type, it must be reasonable to convert the data, for example '5' to an integer will work, 'five' to an integer will not.
+
+syntax:
+select cast('5' as integer)
+postgresql syntax:
+select '5'::integer
+
+eg:
+select cast('5' as integer) as new_int---5
+select cast('five' as integer) as new_int---invalid syntax
+
+select char_lenght(cast(inventory_id as varchar)) from rental;
+
+NullIf:
+This func takes 2 inp and returns null if both are equal, otherwise it returns the first argument passed.
+nullif(arg1,arg2)
+eg:
+nullif(10,10)
+returns null
+
+
+firstname  dept
+vinton     a
+lauren     a
+clarie     b
+
+Select(
+sum(case when dept='a' then 1 else 0 end)/
+Sum(case when dept='b' then 1 else 0 end)
+)as department_ratio
+from depts;-----2this is for a
+
+if u del b record and run this query it will throw error divided by zero
+
+Select(
+sum(case when dept='a' then 1 else 0 end)/
+nullif(Sum(case when dept='b' then 1 else 0 end),0)
+)as department_ratio
+from depts;---null
+
+--
+View:
+A view is a database obj that is of a stored query.
+A view can be accessed as a virtual table in postgresql.
+Notice that a view does not store data physically, it simply stores the query.
+you can also update and alter existing views.
+
+select first_name,last_name,address from customer
+inner join address
+on customer.addid=add.addid;
+
+create or replace view customer_info as
+select first_name,last_name,address,district from customer
+inner join address
+on customer.addid=add.addid;
+
+alter view customer_info rename to c_info
+
+
+NULL Functions in SQL  - https://www.w3schools.com/sql/sql_isnull.asp
+
+https://www.tutorialspoint.com/sql/sql-null-functions.htm
+-----------------------------------------------------------------------------------------------
+DDL(data definition lang)-Create, drop, alter, truncate
+
+DML(data manipulation lang)-Insert,update, delete
+
+DCL(data control lang)-Grant, revoke
+
+TCL(transaction control lang)-commit, rollback, savepoint( commit we cant undo the changes, Rollback- we can undo the changes)
+
+DQL(data Query lang)- select
+
+ 
+
+ 
+
+Drop- whole table remove
+
+Truncate- Complete data delete. We cant retrieve
+
+Delete- complete data delete. Data retrive.
+
+ 
+
+In Truncate and delete- structure should be same. 
+
+ 
+
+Group by - remove duplicates
+
+ 
+
+1.Adding primay keys using alter command:
+
+Alter table table_name add constraints columnname_pk primary key(column_name);
+
+ 
+
+2. Not null and default---Use modify
+
+Not null- alter table table name modify columnname not null;
+
+Default- alter table table name modify columnname default value;
+
+ 
+
+Primary key- unique values, no repeated values, null values are not allowed
+
+Unique-no repeated values/unique values, null value is accepted(only one null value)
+
+Foreign key- refering other table's records/columns
+
+Syntax:
+
+Alter table tablename add constraints contraint name foreign key(column name) references Tablename(columnname)
+
+ 
+
+Eg: alter table studentmarks add constraints studit_fk foreign key(studid) references studentdetails(studid);---after reference we are giving primary key tabble name and column name.
+
+ 
+
+Not null- the column should not be empty 
+
+Accept repeated values
+
+ 
+
+Check- comparing values
+
+ 
+
+Default- default value
+------------------------------------------------------------------------
+1 duplicate values find out
+2. where and having
+3. 2nd highest salarty
+4. join
+5. duplicate deletion
+6. rank and dense rank
+7. 50% records
+8. string length
+9 union union all
+10. aggregate fundtions
+11. substring
+12 schemas
+13 domain name
+---------------------------------
+1.Duplicate values find out
+
+SELECT column, COUNT(column)  FROM table_name GROUP BY column HAVING COUNT(column) > 1;
+SELECT name, email, COUNT(name)  FROM student_contacts  GROUP BY name  HAVING COUNT(name) > 1;  
+
+
+2. Where and having
+
+.A HAVING clause is like a WHERE clause, but applies only to groups as a whole (that is, to the rows in the result set representing groups), whereas the WHERE clause applies to individual rows. A query can contain both a WHERE clause and a HAVING clause
+
+3. 2nd Highest Salary
+
+select * from employees order by sal desc limit 1 offset 1;
+
+skip 1 row(offset)
+return the next 1 row(limit)
+
+OR
+
+SELECT name, salary  
+FROM employee  
+WHERE salary = (  
+    SELECT MAX(salary)  
+    FROM employee  
+    WHERE salary < (SELECT MAX(salary) FROM employee)  
+);
+Output
+
+Name	Salary
+Nishant	500,000
+
+4. join
+
+ 
+
+5.Duplicate deletion:
+
+Student table:
++----+---------+-------+
+| id |  name   | grade |
++----+---------+-------+
+|  1 | Alice   |    90 |
+|  2 | Bob     |    85 |
+|  3 | Alice   |    90 |
+|  4 | Charlie |    70 |
+|  5 | Bob     |    85 |
+|  6 | Alice   |    75 |
++----+---------+-------+
+
+ 
+
+SELECT MIN(id) FROM students GROUP BY name, grade;
+
++---------+
+| MIN(id) |
++---------+
+|       1 |
+|       2 |
+|       4 |
+|       6 |
++---------+
+
+
+DELETE FROM students
+WHERE id NOT IN (
+    SELECT MIN(id)
+    FROM students
+    GROUP BY name, grade
+);
+
++----+---------+-------+
+| id |  name   | grade |
++----+---------+-------+
+|  1 | Alice   |    90 |
+|  2 | Bob     |    85 |
+|  4 | Charlie |    70 |
+|  6 | Alice   |    75 |
++----+---------+-------+
+
+
+6.
+
+7.50% records
+SELECT TOP 50 PERCENT * FROM Customers;
+
+ 
+
+ 
+
+12.Schema
+
+In SQL, a schema is a logical container that holds database objects such as tables, views, procedures, and functions. A schema name is used to identify a specific schema in a SQL database.
+
+A domain is a set of values that can be assigned to a specific column or attribute of a table. It specifies the data type, constraints, and default values that are applicable to the column. A domain name is used to identify a specific domain in a SQL database.
+
+Here is an example of a schema and domain name in SQL:
+
+Schema name: sales
+
+ 
+
+ 
+
+13.Domain name:
+
+A domain is a user-defined data type that specifies the allowable values that can be stored in a specific column or attribute of a table. It defines the data type, constraints, and default values that are applicable to the column. Domains can be used to simplify database design and ensure consistency across tables.
+
+For example, suppose you have a table called "employees" with columns for "employee_id", "first_name", "last_name", and "email". The "email" column could have a domain called "email_address" that specifies the allowable format of email addresses that can be stored in the column. The domain might specify that email addresses must contain the "@" symbol and a valid domain name, and have a maximum length of 255 characters.
+
+Here is an example of creating a domain in SQL:
+
+CREATE DOMAIN email_address AS VARCHAR(255) CHECK (VALUE LIKE '%_@%.%');
+
+This creates a domain called "email_address" that specifies the data type as VARCHAR with a maximum length of 255 characters. The CHECK constraint ensures that any value assigned to this domain must match the specified pattern, which represents a valid email address.
+
+By using a domain in this way, you can ensure that the "email" column in the "employees" table will only contain valid email addresses, even if the table is updated or modified over time.
+-------------------------------------------------------------
+1.MD5
+
+ 
+
+2.Synchronization task and Replication Task:
+
+ 
+
+ 
+
+Data replication is the process of moving or copying data from one place to another or storing data simultaneously in more than one location.
+
+ 
+
+3.Command Task:
+
+ 
+
+4.Null Functions:
+
+https://www.educative.io/answers/what-are-sql-null-functions
+
+ 
+
+5.How you will do inc and full load in informatica
+
+ 
+
+6.Surrogate Key:
+
+Surrogate key is a replacement for the natural prime key. It is a unique identification for each row in the table. It is very beneficial because the natural primary key can change which eventually makes update more difficult. They are always used in form of a digit or integer.
+
+ 
+
+7.Row Functions:
+
+https://www.tutorialgateway.org/sql-row_number/
+
+Row number function is a specific type of function that assigns a unique number to each row within a result set. 
+
+ 
+
+Select row_number() over (order by column name) as row_num, column name from table name;
+
+ 
+
+Singe row-are applied to individual rows and return a result per row.
+
+Eg: String func(upper, lower,substring,concat)etc..
+
+Numeric func(Round, abs, ceil, floor) etc.
+
+Date and time Function(Date_format,Date_add, extract)etc..
+
+ 
+
+Select upper(column_name) as modified_column from table_name;
+
+ 
+
+Multiple row-are applied to group of rows and return a single result for each group.
+Count,SUM, AVg,min, max
+
+Select count(*) as count from table_name group by column_name;
+
+ 
+
+8.Debugger:
+
+Its execution is similar to batch mode execution where we cannot see the intermediate results, or how the data is getting modified from transformation to transformation.
+
+Many a times we get the data in the target which is not as we expected. With the help of debugger, we can analyze how the data is moving within the mapping. We can analyze the data row by row in a debugger.
+
+ 
+
+To monitor the debugger, there are two windows in Informatica designer
+
+Target window
+Instance window
+
+
+In target window, the target record which is going to be inserted into the target table is shown. In instance window, you can select any of the transformation instances of the mapping. 
+
+ 
+
+Break point--
+
+ 
+
+Tracing in Informatica
+
+Whenever you execute a session for a mapping, a session log is generated. It consists of the details of the execution like
+
+Timing of the events
+Error details
+Individual transformation statistics etc.
+
+By default the tracing level is set to normal, it is recommended to use verbose data mode only when you are debugging the mapping. 
+In normal mode, Informatica writes about the transformation initialization and status information, errors encountered and summarizes sessions result.
+In Verbose data, Informatica writes log similar to verbose initialization but in addition also writes every data which passes through the transformation.
+
+
+ 
+
+9.For inc and historical what kind of transformations has been used?
+
+ 
+
+ 
+
+ 
+
+10.Normal Join
+
+Includes rows with matching join conditions. Discards rows that do not match the join conditions.
+
+Master Outer
+
+Includes all rows from the detail pipeline and the matching rows from the master pipeline. It discards the unmatched rows from the master pipeline.
+
+Detail Outer
+
+Includes all rows from the master pipeline and the matching rows from the detail pipeline. It discards the unmatched rows from the detail pipeline.
+
+Full Outer
+
+Includes rows with matching join conditions and all incoming data from the master pipeline and detail pipeline.
+------------------------------------------------------------------------------------------------------------
+
+composite key(mul pk)/index types/cast/procedure(multple sql query)/function/trigger/cursor-temp work area
+
+types of view
+--------------------------------------------------
+Diff between datawarehouse and database
+
+2 tables
+1- emp id, emp name and dept
+
+ 
+
+2- emp id, manager name and salary.
+
+ 
+
+
+3rd largest sal
+
+ 
+
+Select distinct(dept name) emp id,emp name,dept, salary from table1 inner join table2 on tabl1.empid=tab2.empid;---max(sal) group by dept
+
+ 
+
+fact, dimension
+
+============================
+What are LEAD() and LAG() Functions in MySQL?
+The LAG() function is used to get value from the row that precedes the current row.
+
+The LEAD() function is used to get value from a row that succeeds the current row.
+
+check in chatgpt
+
+============
+When to use partition by - Windonw function - check the image which u saved cheat sheet
+
+=============================================================================
+
+Find out male percentage and female percentage
+
+
+
+Table: population
+
+village name, village id, people, gender
+
+thirupur,       1,      10,000,   male
+
+thirupur,       1,       5000,   female
+
+koyembed,       2,      20,000, female
+
+
+SELECT
+    gender,
+    SUM(people) AS total_people,
+    (SUM(people) / (SELECT SUM(people) FROM population) * 100) AS percentage
+FROM population
+GROUP BY gender;
+
+
+===================================================================================================
+Most asked SQL Interview Questions 
+ 
+1. Explain order of execution of SQL.
+2. What is difference between where and having?
+3. What is the use of group by?
+4. Explain all types of joins in SQL?
+5. What are triggers in SQL?
+6. What is stored procedure in SQL
+7. Explain all types of window functions?
+(Mainly rank, row_num, dense_rank, lead & lag)
+8. What is the difference between DROP vs DELETE vs TRUNCATE?
+9. What is difference between DML, DDL and DCL?
+10. Which is faster between CTE and Subquery?
+11. What are constraints and types of Constraints?
+12. What is normalization?
+13. Difference between Group By and Where Clause?
+14. Explain View concepts ?
+15. What are different types of constraints?
+16. Difference between char and Varchar?
+17. What is an index? Explain its different types.
+18. Write an SQL query to find the names of employees starting with ‘A’. 
+19. How many types of clauses in SQL?
+26. Difference between UNION and UNION ALL in SQL?
+27. What are the various types of relationships in SQL?
+28. Difference between Primary Key and Foreign Key?
+29. What is the difference between where and having?
+30. Find the second highest salary of an employee?
+31. Difference between Function and Store procedure ?
+32. How would you optimize a slow SQL query?
+33. Difference between INNER JOIN and OUTER JOIN?
+34. How do you handle duplicate rows in a SQL query?
+35. Write a SQL query to find the top 3 departments with the highest average salary.
+36. Write a SQL query to find the employees who have the same name and work in the same department.
+37. Write a SQL query to find the departments with no employees.
+38. How do you use indexing to improve SQL query performance?
+39. Write a SQL query to find the employees who have worked for more than 5 years.
+40. What is the difference between SUBQUERY and JOIN?
+41. Write a SQL query to find the top 2 products with the highest sales.
+42. How do you use stored procedures to improve SQL query performance?
+43. Write a SQL query to find the customers who have placed an order but have not made a payment.
+44. Write a SQL query to find the employees who work in the same department as their manager.
+45. How do you use window functions to solve complex queries?
+46. Write a SQL query to find the top 3 products with the highest average price.
+47. Write a SQL query to find the employees who have not taken any leave in the last 6 months.
+48. Write down various types of relationships in SQL?
+49. What is the difference between Cluster and Non-Cluster Index?
+50. Why do we use Commit and Rollback commands?
+51. What are indexes in SQL?
+52. What are aggregate functions? Can you name a few?
+============================================================================================================================================
+
+JDBC Connection with Java programming:
+
+Java EE-eclipse
+
+right click new-java project
+proj name-Database testing
+finish.
+
+
+Download-mysql connector 
+
+Right click on database testing which you created--properties-Java build path-add external jars add that mysql connector.
+
+1.Create a class
+
+Connection URL: 
+"jdbc:mysql"//"+host+":"+port+"/databasename";
+
+jdbc:mysql://+localhost+":"+3306+"/databasename";
+
+use demo;==db name
+
+
+Program 1:
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+public class jdbcconection {
+
+public static void main(String[] args) throws SQLException, ClassNotFoundException {
+
+// TODO Auto-generated method stub
+
+String host="localhost";
+String port= "3306";
+
+Connection con=DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/demo", "root", "root");//root root is user name and pwd of mysql
+
+Statement s=con.createStatement();
+ResultSet rs=s.executeQuery("select * from credentials where scenario ='rewardscard'");
+
+while(rs.next())
+{
+  System.out.println(rs.getString("username"));
+  System.out.println(rs.getString("password"));
+
+}
+
+Output:
+zerobcc
+1234ec
+
+Program 2:
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+
+public class jdbcconection {
+
+public static void main(String[] args) throws SQLException, ClassNotFoundException {
+
+// TODO Auto-generated method stub
+
+String host="localhost";
+
+String port= "3306";
+
+Connection con=DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/demo", "root", "root");//root root is user name and pwd of mysql
+
+Statement s=con.createStatement();
+ResultSet rs=s.executeQuery("select * from credentials where scenario ='rewardscard'");
+
+while(rs.next())
+
+{
+
+WebDriver driver= new FirefoxDriver();
+
+driver.get("https://login.salesforce.com");
+driver.findElement(By.xpath(".//*[@id='username']")).sendKeys(rs.getString("username"));
+driver.findElement(By.xpath(".//*[@id='password']")).sendKeys(rs.getString("password"));
+
+}
+
+}
+
+}
+---------------------------------------------------------------------------------------------------------------------
+
+SQL Injection :
+
+SQL injection is a code injection technique, used to attack data-driven applications, in which malicious SQL statements are inserted into an entry field for execution (e.g. to dump the database contents to the attacker).
+
+What an attacker can do?
+
+* ByPassing Logins
+* Accessing secret data
+* Modifying contents of website
+* Shutting down the My SQL server
+
+Before we see what SQL Injection is. We should know what SQL and Database are.
+
+Database:
+Database is collection of data. In website point of view, database is used for storing user ids,passwords,web page details and more.
+
+Some List of Database are:
+
+* DB servers,
+* MySQL(Open source),
+* MSSQL,
+* MS-ACCESS,
+* Oracle,
+* Postgre SQL(open source),
+* SQLite,
+
+SQL:
+Structured Query Language is Known as SQL. In order to communicate with the Database ,we are using SQL query. We are querying the database so it is called as Query language.
+------------------------------------------------------------------
+Web Security/Penetration Testing for Beginners:
+
+What is Security Testing?
+
+Security testing is the process that determines that confidential data stays confidential(
+i.e. it is not exposed to individuals/entities for which is not meant) and users can perform only those tasks that they are authorized to peform.
+
+Security Testing is non functional requirement.
+
+Web application penetration tests continue to be an important part of the secure software development lifecycle process in order to reduce the number and severity of security-related design and coding errors.
+
+https://owasp.org/www-project-top-ten/
+-------------------------------------------------------------------
+Hypertext Transfer Protocol(HTTP) :
+
+is a protocol used in networking. When you type any web address in your web browser, your browser acts as a client, and the computer having the requested information acts as a server. When client requests for any information from the server, it uses HTTP protocol to do so. The server responds back to the client after the request completes. The response comes in the form of web page which you see just after typing the web address and press “Enter”.
+
+Connectionless
+State less
+
+Eg:Facebook.com/friends/session
+
+Cookies = session information - server
+
+Everthing will be saved in cookies, if cookies cleared then everything will be new. 
+
+Hypertext Transfer Protocol Secure (HTTPS)
+
+is a combination of two different protocols. It is more secure way to access the web. It is combination of Hypertext Transfer Protocol (HTTPS) and SSL/TLS protocol. It is more secure way to sending request to server from a client, also the communication is purely encrypted which means no one can know what you are looking for. This kind of communication is used for accessing those websites where security is required. Banking websites, payment gateway, emails
+
+https://, that basically means your computer is talking to the website in a secure code that no one can eavesdrop on.
+
+Basic Features
+
+There are three basic features that make HTTP a simple but powerful protocol:
+
+HTTP is connectionless: The HTTP client, i.e., a browser initiates an HTTP request and after a request is made, the client disconnects from the server and waits for a response. The server processes the request and re-establishes the connection with the client to send a response back.
+
+HTTP is media independent: It means, any type of data can be sent by HTTP as long as both the client and the server know how to handle the data content. It is required for the client as well as the server to specify the content type using appropriate MIME-type.
+
+HTTP is stateless: As mentioned above, HTTP is connectionless and it is a direct result of HTTP being a stateless protocol. The server and client are aware of each other only during a current request. Afterwards, both of them forget about each other. Due to this nature of the protocol, neither the client nor the browser can retain information between different requests across the web pages.
+
+Two HTTP Request Methods: GET and POST
+
+Two commonly used methods for a request-response between a client and server are: GET and POST.
+
+GET - Requests data from a specified resource
+POST - Submits data to be processed to a specified resource
+The GET Method
+
+Note that the query string (name/value pairs) is sent in the URL of a GET request:
+
+/test/demo_form.asp?name1=value1&name2=value2
+
+Some other notes on GET requests:
+
+GET requests can be cached
+GET requests remain in the browser history
+GET requests can be bookmarked
+GET requests should never be used when dealing with sensitive data
+GET requests have length restrictions
+GET requests should be used only to retrieve data
+POST Method
+
+Note that the query string (name/value pairs) is sent in the HTTP message body of a POST request:
+
+POST /test/demo_form.asp HTTP/1.1
+Host: w3schools.com
+name1=value1&name2=value2
+
+Some other notes on POST requests:
+
+POST requests are never cached
+POST requests do not remain in the browser history
+POST requests cannot be bookmarked
+POST requests have no restrictions on data length
+
+Fiddler is a debugging tool, it records all the sites whatever we are opening in chrome...
+------------------------------------------------------------------------------------------------------
+QA Click Academy :
+
+What is XSS?
+Cross Site Scripting also known as XSS , is one of the most common web appliction vulnerability that allows an attacker to run his own client side scripts(especially Javascript) into web pages viewed by other users.
+
+Where the Attacker can run his scripts?
+
+url post string
+https://www.google.co.in/#q=web+application
+form submission
+TextAreas
+
+In a typical XSS attack, a hacker inject his malicious javascript code in the legitimate website . When a user visit the specially-crafted link , it will execute the malicious javascript. A successfully exploited XSS vulnerability will allow attackers to do phishing attacks, steal accounts and even worms.
+
+Different Websites apply filters at different levels
+
+http://www.nowrunning.com/bollywood-movie-directory/srin
+
+Let us where it stores
+
+Why it is not accepting?
+
+Try to identify Filter conditions:
+Half Secure
+
+http://www.allmovie.com/search
+
+Accepting- No filter
+
+How it stores?
+
+Differrent encoding Patterns Available
+
+But still not secure
+
+https://www.neat.com/?post_type=helpcenter&s=%3Ci%3Ehello%3C/i%3E
+
+Perfect
+
+https://www.learnsocial.com/searchcourse?type=All&searchby=%3Ci%3Ehrlo%3C/i%3E&refs=&sear
+
+ch_position=&search_value=
+
+Boom!!
+
+Internet Explorer 8 included a novel new feature to help prevent reflected cross-site scripting attacks, known as the XSS Filter. This filter runs by default in the Internet, Trusted, and Restricted security zones. Local Intranet zone pages may opt-in to the protection using the same header:
+
+X-XSS-Protection: 1
+
+If a cross-site scripting attack is detected, Internet Explorer 8 and 9 will attempt to make the smallest possible modification to the returned web page in order to block the attack. Here's an example. In most cases, the modification is to change one or more characters in the returned page into the hash character (“#”) breaking any script that may have been reflected from the outbound HTTP request.
+
+Pages that have been secured against XSS via server-side logic may opt-out of this protection using a HTTP response header:
+
+X-XSS-Protection: 0
+
+In March of 2010, They have added to IE8 support for a new token in the X-XSS-Protection header, mode=block.
+
+X-XSS-Protection: 1; mode=block
+
+Notes:
+<i>hello<i>  if it encodes i mean it changes hello in bold it is attackable, right click check view page source search there hello and check same whatever you types it is there or not. if it is not fully there then it is trusted once. try giving /hello like that also.
+
+--------------------------------------------------------------
+What are cookies ?
+
+cookies are small, often encrypted text files, located in browser directories. They are used by web developers to help users navigate their websites efficiently and perform certain functions
+
+Cookies are created when a user's browser loads a particular website. The website sends information to the browser which then creates a text file. Every time the user goes back to the same website, the browser retrieves and sends this file to the website's server
+
+Session Cookies are also used by the server to store information about user page activities so users can easily pick up where they left off on the server's pages. By default, web pages really don't have any 'memory'. Cookies tell the server what pages to show the user so the user doesn't have to remember or start navigating the site all over again.
+
+Difference between cookies and Session cookies :
+
+Webpages have no memories. A user going from page to page will be treated by the website as a completely new visitor. Session cookies enable the website you are visiting to keep track of your movement from page to page so you don't get asked for the same information you've already given to the site. Cookies allow you to proceed through many pages of a site quickly and easily without having to authenticate or reprocess each new area you visit.
+
+Session cookies allow users to be recognized within a website so any page changes or item or data selection you do is remembered from page to page. The most common example of this functionality is the shopping cart feature of any e-commerce site. When you visit one page of a catalog and select some items, the session cookie remembers your selection so your shopping cart will have the items you selected when you are ready to check out. Without session cookies, if you click CHECKOUT, the new page does not recognize your past activities on prior pages and your shopping cart will always be empty.
+
+Life with out Cookies :
+
+Without cookies, websites and their servers have no memory. A cookie, like a key, enables swift passage from one place to the next. Without a cookie every time you open a new web page the server where that page is stored will treat you like a completely new visitor
+
+They are used to make online surfing faster and easier by make the sites you've visited remember who you are, like remembering you IP address or passwords, along with your own preferences such as when Amazon recommend a book or music CD similar to what you looked for in your last visit.
+
+How Secure are Cookies?How Long Does a Cookie Last?
+Testing for cookie attribute vulnerabilities:
+
+By using an intercepting proxy or traffic intercepting browser plug-in, trap all responses where a cookie is set by the application (using the Set-cookie directive) and inspect the cookie for the following:
+
+Secure Attribute - Whenever a cookie contains sensitive information or is a session token, then it should always be passed using an encrypted tunnel. For example, after logging into an application and a session token is set using a cookie, then verify it is tagged using the ";secure" flag. If it is not, then the browser would agree to pass it via an unencrypted channel such as using HTTP, and this could lead to an attacker leading users into submitting their cookie over an insecure channel.
+
+HttpOnly Attribute - This attribute should always be set even though not every browser supports it. This attribute aids in securing the cookie from being accessed by a client side script, it does not eliminate cross site scripting risks but does eliminate some exploitation vectors. Check to see if the ";HttpOnly" tag has been set.
+
+Domain Attribute - Verify that the domain has not been set too loosely. As noted above, it should only be set for the server that needs to receive the cookie. For example if the application resides on server app.mysite.com, then it should be set to "; domain=app.mysite.com" and NOT "; domain=.mysite.com" as this would allow other potentially vulnerable servers to receive the cookie.
+
+Path Attribute - Verify that the path attribute, just as the Domain attribute, has not been set too loosely. Even if the Domain attribute has been configured as tight as possible, if the path is set to the root directory "/" then it can be vulnerable to less secure applications on the same server. For example, if the application resides at /myapp/, then verify that the cookies path is set to "; path=/myapp/" and NOT "; path=/" or "; path=/myapp". Notice here that the trailing "/" must be used after myapp. If it is not used, the browser will send the cookie to any path that matches "myapp" such as
+
+"myapp-exploited".
+
+Expires Attribute - If this attribute is set to a time in the future verify that the cookie does not contain any sensitive information. For example, if a cookie is set to "; expires=Sun, 31-Jul-2016 13:45:29 GMT" and it is currently July 31st 2014, then the tester should inspect the cookie. If the cookie is a session token that is stored on the user's hard drive then an attacker or local user (such as an admin) who has access to this cookie can access the application by resubmitting this token until the expiration date passes.
+----------------------------------------------
+
+
+
+
+
+
+
+ 
