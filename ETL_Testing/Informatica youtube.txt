@@ -1,0 +1,239 @@
+bank transaction - 35% transaction didn't done, due to late otp and OTP not delivered or not able to put otp
+so we have to reduce 10s to 2s -otp delivery time -(how business in improving) - after changing it - 10 dys they monitored and saw that 35 to 30% reduced.. These kind of analysis we need to do and improve business.. why they are declining? need to find out.
+
+once we send the data-- then data visualization - tablueu, powerbi, looker
+
+
+
+data lake - azure, snowflake, hiv, Hadoop
+data warehouse - historical data
+
+transactions, data taking, keeping - everything in one db.. few yrs back it is easy to track in same db.
+
+when volume increasing - when we take data- slowness will be there
+
+so they decided to bring ETL - one db(for transactions) and another db(data warehouse - historical data)
+
+normal db, datawarehouse(structured data) - comparing to warehouse, lake is very big (more unstructured data)
+
+normal db - OLTP (online transaction processing, heterogenous sources) - sales force
+warehouse - OLAP (online Analytical processing) 
+
+OLTP --> transformation logics(eg sal will diff for each countries based on govt rules, lang) --> data warehouse
+
+inside data warehouse - we will have many data mart
+
+Reporting tool - tableau, power bi, QlikView/Qliksense,Zoomdata, looker, IBM cognose, OBIEE, microstrategy, spotfire
+
+These OLTP(last 5yrs data) ==> logics ==> OLAP(analytics purpose so we have all data)
+extract ==>Transform(Batch processing-particular time interval) ==> load (This transform they will say us batch processing)eg: US transacation will verify and send
+
+Data lake - continuous - every seconds data will flow (heterogeneous sr --> warehouse)eg.facebook
+
+What is BI?(business intelligence) --> Business intelligence enable the business to make intelligence, fact-based decisions(palaya data)
+Aggregate data - integrating data from hetro srcs(data mart, warehouse, etl tools, integrations tool)
+present data - reporting tools
+Enrich data - do analysis(add context to create info, descriptive stats, benchmarks variance to plan or LY
+Inform a decision - decision  are fact based and data driven.
+
+
+Data warehouse - is a subject oriented, integrated, time variant and non volatile collection of data to support managmenetns decision making process.
+
+Subject oriented - A data warehouse is organized around a major subjects, such as customer, supplier, product and sales.
+Integrated- A data warehouse is usually constructed by integrating multiple heterogeneous sources.
+Time variant - data are stored to provide info from a historical perspective.
+Nonvolatile - meaning that data in the db is never overwritten or deleted, but retained for future reporting.
+
+
+Data warehousing - is the integrated, architected and periodic copying data from various heterogeneous sources, both inside and outside the enterprise into a centralised repo optimised for reporting and analytical processing.
+
+why companies deploy DW?
+
+Operational systems are being impacted bcz of reporting requests.
+operational sys cannot give a needed historical perspective.
+Business is not getting consistent or timely answers(no single view of the business)
+Too expensive/Too difficult to tie src sys together for one-off reporting.
+No one knows the rules from legacy reporting systems. Bcz the competition has one.
+Investment in a BI tool wont work without consolidated, rationalized data.
+
+
+Top down approach --> data marts are created only after the complete data warehouse has been created.(src --> warehouse --> data marts)
+Bottom up approach --> Enterprise data warehouse is create by combining the data marts together.(hetro src -->data mart --> warehouse)
+
+data mart created by data modelling team.
+
+2 types of table in DW (Dimension and fact table):
+
+India region - 4 - east, west, north, south
+south region - states
+
+Dimension Table --> non measurable, primary keys(master table)(maintains history)
+Fact table --> measurable, foreign keys(meaningful info how we are taking)
+
+India - 5 regions, north south east west - states, city, stores
+
+history will maintain in dimension
+
+eg:Dimension(prod description)
+prod_d table
+prod_id(PK) prod name, desc, made_by, price, spec
+
+Customer_d(PK)
+cust_id(PK), cust name, mble no, dob, address, city, country
+
+D_store(PK)
+store_id(pl), srcnum
+date_key(FK), prod_id(FK),cust_id(FK),..
+
+Fact
+Sales_table
+date_key(FK), prod_id)FK), cust_id(FK), store_id(FK), region_id(FK), qty, unit price, total price --everthng in src only(OLTP)
+
+if we are in ETL = 1st dimension then fact
+
+📊 What is a Fact?
+Definition: A fact is a numeric, measurable value that represents a business event or transaction.
+
+Examples:
+
+Sales revenue (₹5000)
+
+Quantity sold (10 units)
+
+Hours worked (8 hours)
+
+Characteristics:
+
+Stored in fact tables
+
+Usually contain foreign keys linking to dimensions
+
+Often aggregated (sum, average, count) for analysis
+
+📊 What is a Dimension?
+Definition: A dimension provides descriptive context for facts.
+
+Examples:
+
+Customer (Name, Age, Location)
+
+Product (Category, Brand, Price)
+
+Time (Date, Month, Year)
+
+Characteristics:
+
+Stored in dimension tables
+
+Contain attributes that describe the “who, what, when, where” of a fact
+
+Enable slicing and dicing of data for reporting
+
+🔍 How to Identify a Fact Table
+Contains measurements or metrics: Numbers you can aggregate (sales amount, quantity, revenue, hours worked).
+
+Granularity: Each row represents a business event or transaction (e.g., one sale, one shipment).
+
+Foreign keys: Usually references multiple dimension tables (customer_id, product_id, date_id).
+
+Few descriptive columns: Mostly numeric values and keys.
+
+Example:
+
+Columns: Date_ID, Customer_ID, Product_ID, Sales_Amount, Quantity_Sold.
+
+🔍 How to Identify a Dimension Table
+Contains descriptive attributes: Textual/contextual data (customer name, product category, region).
+
+Primary key: A single unique identifier (Customer_ID, Product_ID).
+
+No aggregations: Values are descriptive, not numeric measures.
+
+Example:
+
+Columns: Customer_ID, Customer_Name, Age, City.
+
+🏗️ How to Recognize the Schema
+Star Schema
+
+One central fact table surrounded by multiple dimension tables.
+
+Dimension tables are denormalized (contain rich descriptive attributes).
+
+Easy for BI tools and fast queries.
+
+Snowflake Schema
+
+Similar to star, but dimension tables are normalized into multiple related tables.
+
+Example: A “Product” dimension split into “Product” and “Category” tables.
+
+Saves storage, but queries are more complex.
+
+Galaxy / Fact Constellation Schema
+
+Multiple fact tables share dimension tables.
+
+Useful when analyzing different business processes (sales, inventory, shipping) together.
+
+DW roles: business uers (people with knowledge of the business and needs for reporting)
+report writeers, data modelers, etl dev, dbaS
+
+
+day2:
+informatica architecture:SOA(service oriented architecture)
+
+
+                Integration service(data movement)
+
+              reader, transformation, writer:
+
+
+src(Read) --> informatica pc server --> target(insert/write)
+                       |
+                   this report will give info to src and server(repo service)
+                 repository(DB)
+                 metadata stores who ran it, how
+ un,pd,hst,domain, port      |
+                   
+                 informatica client(windows) <----ETL dev
+                  R  D  W M
+                   
+DAY2:
+rep manager - create folder
+ 
+
+open designer:folder - right click open then ony it will come
+
+src analyser -->> create connection --3 dot --> add
+src and target - db
+
+data src name: can be anything
+port num
+host
+
+same for target. 
+
+username, owner name(schema name will come automatically) after giving pwd. you will get table structure
+
+mapping name should always start with small m_
+
+after mapping - ctrl s - save - it will show valid then only you can create wf
+
+go to wf manager --> wf designer --wf--> create --> wf_empl_data
+
+here only we can run session.
+
+click on session -- double click on it.. src - give connections
+connections - relational connection--> oracle-->username,pwd
+
+if you want truncate target table option --then use it in target
+
+then link it and save it.. ctrl s -- valid - start wf
+wf monitor -- right click on session ->click on run prop
+
+throughput --> (record/per second)
+
+-- whatever folder or wf you create - everything will store in metadata db - query.
+
+
